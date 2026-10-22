@@ -57,4 +57,4 @@ python3 -m unittest discover -s tests
 claude plugin validate .
 ```
 
-The guard is a tripwire, not a sandbox: it matches paths in tool inputs, so a deliberately obfuscated shell command could get around it. For the strongest separation, keep the source outside the target checkout or off the machine during clean phases.
+The guard is a tripwire, not a sandbox: it matches paths in tool inputs (including paths embedded in quoted code), so a deliberately obfuscated shell command could get around it. It doesn't follow `cd`, so in Bash it treats a parent of a sealed directory as dangerous only for commands that walk trees (`grep -r`, `find`, `rg`, `ls -R`, ...). For the strongest separation, keep the source outside the target checkout or off the machine during clean phases.

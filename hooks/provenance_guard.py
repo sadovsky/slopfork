@@ -57,8 +57,22 @@ def is_within(child, parent):
         return False
 
 
-def touches(path, sealed, unsealed):
-    """True if reading/searching `path` could expose a sealed path."""
+# Bash commands that walk directory trees. Only these make an ancestor of a sealed
+# path dangerous; for anything else (`cd ..`, a heredoc with `//` comments) a bare
+# ancestor token is not a read.
+RECURSIVE_BASH = re.compile(
+    r"\b(grep|egrep|fgrep)\b[^|;&]*\s-\w*[rR]|\b(rg|find|tree|du|tar|zip|rsync|fd|ag|ack)\b"
+    r"|\bgit\s+grep\b|\bcp\b[^|;&]*\s-\w*[rRa]|\bls\b[^|;&]*\s-\w*R"
+)
+
+
+# Path-like substrings anywhere in a command, including inside quoted code such as
+# python3 -c "open('../src/x.py')", which never becomes a shell token of its own.
+EMBEDDED_PATH = re.compile(r"[~\w.\-]*(?:/[\w.\-]+)+/?")
+
+
+def touches(path, sealed, unsealed, ancestors=True):
+    """Return the sealed path that reading/searching `path` could expose, or None."""
     for s in sealed:
         if is_within(path, s):
             # Explicitly unsealed sub-paths (e.g. public docs) are fine.
@@ -66,7 +80,7 @@ def touches(path, sealed, unsealed):
                 continue
             return s
         # Searching an ancestor of a sealed dir would sweep it in.
-        if is_within(s, path):
+        if ancestors and is_within(s, path):
             return s
     return None
 
@@ -91,6 +105,7 @@ def candidate_paths(tool, tool_input, cwd):
                 continue
             if "/" in t or t.startswith(".") or os.path.exists(os.path.join(cwd, t)):
                 out.append(norm(t, cwd))
+        out.extend(norm(m, cwd) for m in EMBEDDED_PATH.findall(cmd))
         return out
     return []
 
@@ -170,8 +185,9 @@ def main():
                 hit, target = pat, url
                 break
     else:
+        ancestors = tool != "Bash" or bool(RECURSIVE_BASH.search(tool_input.get("command", "")))
         for p in candidate_paths(tool, tool_input, cwd):
-            s = touches(p, sealed, unsealed)
+            s = touches(p, sealed, unsealed, ancestors)
             if s:
                 hit, target = s, p
                 break

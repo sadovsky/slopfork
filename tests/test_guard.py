@@ -102,6 +102,20 @@ class GuardTest(unittest.TestCase):
         self.assertEqual(self.call("Bash", {"command": f"grep -r x {self.src}"}), "deny")
         self.assertEqual(self.call("Bash", {"command": "npm test"}), "allow")
 
+    def test_bash_ancestor_only_for_recursive_commands(self):
+        # Regression: these were false positives in the mazelib cleanroom runs.
+        self.config(mode="blackbox")
+        parent = os.path.dirname(self.src)
+        self.assertEqual(self.call("Bash", {"command": "cd .. && git clone https://example.com/x y"}), "allow")
+        heredoc = "cat > src/a.ts <<'EOF'\n// comment with / and // tokens\nexport const x = 1;\nEOF"
+        self.assertEqual(self.call("Bash", {"command": heredoc}), "allow")
+        self.assertEqual(self.call("Bash", {"command": f"grep -rn secret {parent}"}), "deny")
+        self.assertEqual(self.call("Bash", {"command": f"find {parent} -name '*.py'"}), "deny")
+        self.assertEqual(self.call("Bash", {"command": "ls -R .."}), "deny")
+        # Direct references inside a heredoc are still caught.
+        py = "python3 - <<'EOF'\nprint(open('../orig/lib.py').read())\nEOF"
+        self.assertEqual(self.call("Bash", {"command": py}), "deny")
+
     def test_probe_commands(self):
         self.config(mode="blackbox", sealed_paths=["../orig", "run_orig.py"])
         write(os.path.join(self.tgt, "run_orig.py"), "")
