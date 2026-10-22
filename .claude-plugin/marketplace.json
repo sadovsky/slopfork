@@ -1,0 +1,14 @@
+{
+  "name": "slopfork",
+  "owner": {
+    "name": "Alexander Sadovsky"
+  },
+  "description": "Slopfork: port codebases between languages with provenance controls and layered verification.",
+  "plugins": [
+    {
+      "name": "slopfork",
+      "source": "./",
+      "description": "Port code between languages with provenance controls and layered verification."
+    }
+  ]
+}

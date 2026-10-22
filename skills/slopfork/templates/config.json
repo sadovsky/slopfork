@@ -1,0 +1,30 @@
+{
+  "source": {
+    "location": "../SOURCE-NAME",
+    "repo_url": "https://github.com/OWNER/REPO",
+    "revision": "FULL_COMMIT_SHA",
+    "license": "SPDX-ID",
+    "runnable": "how to run the original, or null"
+  },
+  "target": {
+    "language": "typescript",
+    "runtime": "node>=20",
+    "style": "idiomatic",
+    "src": "src"
+  },
+  "mode": "transpile",
+  "phase": "intake",
+  "sealed_paths": ["../SOURCE-NAME", ".slopfork/dirty"],
+  "unsealed_paths": ["../SOURCE-NAME/README.md", "../SOURCE-NAME/docs"],
+  "sealed_url_patterns": [
+    "github\\.com/OWNER/REPO/(blob|raw|tree|archive)/",
+    "raw\\.githubusercontent\\.com/OWNER/REPO/"
+  ],
+  "probe_commands": [
+    "^python3 \\.slopfork/dirty/adapter_original\\.py( .*)?$"
+  ],
+  "default_level": "L2",
+  "modules": [
+    { "name": "example/module", "level": "L2", "status": "todo", "notes": "" }
+  ]
+}

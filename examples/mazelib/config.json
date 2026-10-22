@@ -1,0 +1,199 @@
+{
+  "source": {
+    "location": "../mazelib",
+    "repo_url": "https://github.com/john-science/mazelib",
+    "revision": "56cd88294a36746bbd324c2c9f7e4ab26095deb3",
+    "license": "MIT",
+    "runnable": "pip install -e ../mazelib (needs numpy + Cython)"
+  },
+  "target": {
+    "language": "typescript",
+    "runtime": "node>=20",
+    "style": "idiomatic",
+    "src": "src",
+    "also": "rust (second target, same goldens)"
+  },
+  "mode": "transpile",
+  "phase": "intake",
+  "sealed_paths": [
+    "../mazelib",
+    ".slopfork/dirty"
+  ],
+  "unsealed_paths": [
+    "../mazelib/README.md",
+    "../mazelib/docs"
+  ],
+  "sealed_url_patterns": [
+    "github\\.com/john-science/mazelib/(blob|raw|tree|archive)/",
+    "raw\\.githubusercontent\\.com/john-science/mazelib/"
+  ],
+  "probe_commands": [
+    "^python3 \\.slopfork/dirty/adapter_original\\.py( .*)?$"
+  ],
+  "rng_strategy": "port-mt19937",
+  "default_level": "L2",
+  "modules": [
+    {
+      "name": "core/Maze (grid model, entrances, tostring)",
+      "level": "L2",
+      "status": "todo",
+      "notes": "tostring and entrance placement compared exactly under ported RNG"
+    },
+    {
+      "name": "core/rng (MT19937 matching Python random + numpy RandomState.shuffle)",
+      "level": "L2",
+      "status": "todo",
+      "notes": "enables byte-identical generator output; drop if rng_strategy=invariants"
+    },
+    {
+      "name": "generate/AldousBroder",
+      "level": "L2",
+      "status": "todo",
+      "notes": "exact under ported RNG; always also invariant-checked"
+    },
+    {
+      "name": "generate/BacktrackingGenerator",
+      "level": "L5",
+      "status": "todo",
+      "notes": "L5 pilot: Lean proof that output is a spanning tree of the cell graph"
+    },
+    {
+      "name": "generate/BinaryTree",
+      "level": "L2",
+      "status": "todo",
+      "notes": "exact under ported RNG; always also invariant-checked"
+    },
+    {
+      "name": "generate/CellularAutomaton",
+      "level": "L2",
+      "status": "todo",
+      "notes": "exact under ported RNG; always also invariant-checked"
+    },
+    {
+      "name": "generate/Division",
+      "level": "L2",
+      "status": "todo",
+      "notes": "exact under ported RNG; always also invariant-checked"
+    },
+    {
+      "name": "generate/DungeonRooms",
+      "level": "L2",
+      "status": "todo",
+      "notes": "exact under ported RNG; always also invariant-checked"
+    },
+    {
+      "name": "generate/Ellers",
+      "level": "L2",
+      "status": "todo",
+      "notes": "exact under ported RNG; always also invariant-checked"
+    },
+    {
+      "name": "generate/GrowingTree",
+      "level": "L2",
+      "status": "todo",
+      "notes": "exact under ported RNG; always also invariant-checked"
+    },
+    {
+      "name": "generate/HuntAndKill",
+      "level": "L2",
+      "status": "todo",
+      "notes": "exact under ported RNG; always also invariant-checked"
+    },
+    {
+      "name": "generate/Kruskal",
+      "level": "L2",
+      "status": "todo",
+      "notes": "exact under ported RNG; always also invariant-checked"
+    },
+    {
+      "name": "generate/Prims",
+      "level": "L2",
+      "status": "todo",
+      "notes": "exact under ported RNG; always also invariant-checked"
+    },
+    {
+      "name": "generate/Sidewinder",
+      "level": "L2",
+      "status": "todo",
+      "notes": "exact under ported RNG; always also invariant-checked"
+    },
+    {
+      "name": "generate/TrivialMaze",
+      "level": "L2",
+      "status": "todo",
+      "notes": "exact under ported RNG; always also invariant-checked"
+    },
+    {
+      "name": "generate/Wilsons",
+      "level": "L2",
+      "status": "todo",
+      "notes": "exact under ported RNG; always also invariant-checked"
+    },
+    {
+      "name": "solve/BacktrackingSolver",
+      "level": "L2",
+      "status": "todo",
+      "notes": "run on recorded mazes from the original"
+    },
+    {
+      "name": "solve/Chain",
+      "level": "L2",
+      "status": "todo",
+      "notes": "run on recorded mazes from the original"
+    },
+    {
+      "name": "solve/Collision",
+      "level": "L2",
+      "status": "todo",
+      "notes": "run on recorded mazes from the original"
+    },
+    {
+      "name": "solve/RandomMouse",
+      "level": "L2",
+      "status": "todo",
+      "notes": "run on recorded mazes from the original"
+    },
+    {
+      "name": "solve/ShortestPath",
+      "level": "L2",
+      "status": "todo",
+      "notes": "run on recorded mazes from the original"
+    },
+    {
+      "name": "solve/ShortestPaths",
+      "level": "L2",
+      "status": "todo",
+      "notes": "run on recorded mazes from the original"
+    },
+    {
+      "name": "solve/Tremaux",
+      "level": "L2",
+      "status": "todo",
+      "notes": "run on recorded mazes from the original"
+    },
+    {
+      "name": "transmute/CuldeSacFiller",
+      "level": "L2",
+      "status": "todo",
+      "notes": "run on recorded mazes from the original"
+    },
+    {
+      "name": "transmute/DeadEndFiller",
+      "level": "L2",
+      "status": "todo",
+      "notes": "run on recorded mazes from the original"
+    },
+    {
+      "name": "transmute/Perturbation",
+      "level": "L2",
+      "status": "todo",
+      "notes": "run on recorded mazes from the original"
+    },
+    {
+      "name": "core/generate_monte_carlo",
+      "level": "L2",
+      "status": "todo",
+      "notes": "depends on generators + solvers"
+    }
+  ]
+}

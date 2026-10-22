@@ -1,0 +1,8 @@
+{
+  "name": "slopfork",
+  "version": "0.1.0",
+  "description": "Port a codebase from one language or stack to another, with selectable provenance (blackbox, cleanroom, transpile) and per-module verification levels (build, tests, differential, API contract, visual, formal).",
+  "author": { "name": "Alexander Sadovsky" },
+  "license": "MIT",
+  "keywords": ["port", "rewrite", "transpile", "clean-room", "differential-testing"]
+}
