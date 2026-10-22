@@ -14,14 +14,14 @@
   },
   "mode": "transpile",
   "phase": "intake",
-  "sealed_paths": ["../SOURCE-NAME", ".slopfork/dirty"],
+  "sealed_paths": ["../SOURCE-NAME", "../TARGET-NAME-dirty"],
   "unsealed_paths": ["../SOURCE-NAME/README.md", "../SOURCE-NAME/docs"],
   "sealed_url_patterns": [
     "github\\.com/OWNER/REPO/(blob|raw|tree|archive)/",
     "raw\\.githubusercontent\\.com/OWNER/REPO/"
   ],
   "probe_commands": [
-    "^python3 \\.slopfork/dirty/adapter_original\\.py( .*)?$"
+    "^python3 \\.\\./TARGET-NAME-dirty/adapter_original\\.py( .*)?$"
   ],
   "default_level": "L2",
   "modules": [

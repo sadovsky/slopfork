@@ -17,7 +17,7 @@
   "phase": "intake",
   "sealed_paths": [
     "../mazelib",
-    ".slopfork/dirty"
+    "../mazelib-port-dirty"
   ],
   "unsealed_paths": [
     "../mazelib/README.md",
@@ -28,7 +28,7 @@
     "raw\\.githubusercontent\\.com/john-science/mazelib/"
   ],
   "probe_commands": [
-    "^python3 \\.slopfork/dirty/adapter_original\\.py( .*)?$"
+    "^python3 \\.\\./mazelib-port-dirty/adapter_original\\.py( .*)?$"
   ],
   "rng_strategy": "port-mt19937",
   "default_level": "L2",

@@ -21,7 +21,7 @@ Adapters can also take a JSON-lines batch (one case per line in, one result per 
 # 1. generate cases (hand-written + generated) into .slopfork/goldens/<module>/cases.jsonl
 # 2. record goldens from the original
 python3 scripts/diff_harness.py record --cases .slopfork/goldens/<m>/cases.jsonl \
-    --cmd "python3 .slopfork/dirty/adapter_original.py" --out .slopfork/goldens/<m>/expected.jsonl --batch
+    --cmd "python3 ../<target>-dirty/adapter_original.py" --out .slopfork/goldens/<m>/expected.jsonl --batch
 # 3. compare the target
 python3 scripts/diff_harness.py compare --cases ... --expected .slopfork/goldens/<m>/expected.jsonl \
     --cmd "node dist/adapter.js" --batch [--float-tol 1e-9] [--ignore-key timing]

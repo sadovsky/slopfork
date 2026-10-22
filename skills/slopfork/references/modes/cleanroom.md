@@ -12,7 +12,7 @@ The guard hook enforces this. In cleanroom mode, sealed paths can be read only b
 ## Setup
 1. Put the source **outside** the target checkout (e.g. `../<name>-source`) and list it in `sealed_paths`. List public docs that clean agents may read (README, docs/) in `unsealed_paths`.
 2. Add `sealed_url_patterns` for places the code can be fetched from (the GitHub blob/raw URLs of the repo, the package's sdist on PyPI or npm).
-3. Keep dirty-side helpers (the original's adapter, scratch notes) in `.slopfork/dirty/` and add that directory to `sealed_paths`. If the original is runnable, add `probe_commands` regexes for invoking the adapter (e.g. `^python3 \.slopfork/dirty/adapter_original\.py.*$`), so clean agents can **run** it to check behavior without reading it.
+3. Keep dirty-side helpers (the original's adapter, scratch notes) **outside** the target checkout, in `../<target>-dirty/`, and add it to `sealed_paths`. Don't put them inside the target repo: a sealed directory inside the repo would make every repo-wide Grep or Glob an ancestor of a sealed path, and the guard would block it. If the original is runnable, add `probe_commands` regexes for invoking the adapter (e.g. `^python3 \.\./<target>-dirty/adapter_original\.py.*$`), so clean agents can **run** it to check behavior without reading it.
 
 ## What a spec may contain
 - Public API names and signatures as documented, behavior, invariants, complexity expectations, error cases, worked input/output examples.

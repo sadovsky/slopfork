@@ -89,6 +89,13 @@ class GuardTest(unittest.TestCase):
         self.assertEqual(self.call("Grep", {"pattern": "x", "path": os.path.dirname(self.src)}), "deny")
         self.assertEqual(self.call("Glob", {"pattern": "**/*.py"}), "allow")  # cwd = target, not an ancestor
 
+    def test_sealed_dir_inside_repo_blocks_repo_wide_search(self):
+        # Documented trade-off: keep dirty dirs outside the target checkout.
+        self.config(mode="blackbox", sealed_paths=["../orig", ".slopfork/dirty"])
+        self.assertEqual(self.call("Grep", {"pattern": "x"}), "deny")
+        self.config(mode="blackbox", sealed_paths=["../orig", "../port-dirty"])
+        self.assertEqual(self.call("Grep", {"pattern": "x"}), "allow")
+
     def test_bash(self):
         self.config(mode="blackbox")
         self.assertEqual(self.call("Bash", {"command": "cat ../orig/lib.py"}), "deny")

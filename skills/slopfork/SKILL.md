@@ -68,7 +68,7 @@ Cleanroom: run `scripts/leak_audit.py` on every spec before leaving this phase (
 
 Build verification against the **original first**, so the harness is known to be correct before any target code exists:
 
-- L2: write an adapter for the original (`.slopfork/dirty/adapter_original.*`) that reads a case as JSON on stdin and writes the result as JSON on stdout. Generate cases and record goldens with `scripts/diff_harness.py record`.
+- L2: write an adapter for the original (`../<target>-dirty/adapter_original.*`, outside the target checkout; in transpile mode it may live in the repo) that reads a case as JSON on stdin and writes the result as JSON on stdout. Generate cases and record goldens with `scripts/diff_harness.py record`.
 - L3/L4: record traffic or screenshots from the original.
 - L5: write the TLA+ model and check it.
 
