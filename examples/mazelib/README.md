@@ -1,5 +1,7 @@
 # Example: mazelib (Python) → TypeScript and Rust
 
+**Results:** see [COMPARISON.md](COMPARISON.md). All four ports (TS/Rust x transpile/cleanroom) pass all 2,396 goldens.
+
 First real fixture for slopfork. [`config.json`](config.json) is a starting `.slopfork/config.json` for the port repo.
 
 - **Source**: [john-science/mazelib](https://github.com/john-science/mazelib) @ `56cd882`, MIT. About 3.2k lines of Python with Cython `.pxd` type stubs: 14 generators, 7 solvers, 3 transmuters, and a `Maze` façade.
