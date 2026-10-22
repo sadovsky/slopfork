@@ -13,7 +13,10 @@ Subcommands:
            checker, which replies {"ok": bool, "why": str}
 
 Each case must have a unique "id". Cases may set "compare": "exact" (default),
-"invariant" (skip golden diff, rely on `check`), or "skip".
+"invariant" (skip golden diff, rely on `check`), or "skip". "compare" may also
+be an object keyed by profile name, e.g. {"tx": "exact", "cr": "invariant"},
+so ports with different obligations share one case file; select the key with
+--profile.
 """
 
 import argparse
@@ -33,6 +36,15 @@ def write_jsonl(path, rows):
     with open(path, "w") as f:
         for r in rows:
             f.write(json.dumps(r, sort_keys=True) + "\n")
+
+
+def compare_kind(case, profile):
+    kind = case.get("compare", "exact")
+    if isinstance(kind, dict):
+        if profile not in kind:
+            sys.exit(f"case {case.get('id')} has per-profile compare {sorted(kind)} but --profile is {profile!r}")
+        kind = kind[profile]
+    return kind
 
 
 def run_adapter(cmd, cases, batch, timeout):
@@ -115,7 +127,7 @@ def cmd_compare(args):
     expected = {row["id"]: row["result"] for row in load_jsonl(args.expected)}
     error_map = json.load(open(args.error_map)) if args.error_map else {}
     ignore = set(args.ignore_key or [])
-    todo = [c for c in cases if c.get("compare", "exact") == "exact"]
+    todo = [c for c in cases if compare_kind(c, args.profile) == "exact"]
     results = run_adapter(args.cmd, todo, args.batch, args.timeout)
     failures = []
     for c, r in zip(todo, results):
@@ -132,7 +144,7 @@ def cmd_compare(args):
 
 def cmd_check(args):
     cases = load_jsonl(args.cases)
-    todo = [c for c in cases if c.get("compare", "exact") != "skip"]
+    todo = [c for c in cases if compare_kind(c, args.profile) != "skip"]
     results = run_adapter(args.cmd, todo, args.batch, args.timeout)
     payload = "".join(json.dumps({"case": c, "result": r}) + "\n" for c, r in zip(todo, results))
     p = subprocess.run(shlex.split(args.checker), input=payload, capture_output=True, text=True, timeout=args.timeout)
@@ -168,6 +180,7 @@ def main():
         p.add_argument("--batch", action="store_true", help="send all cases to one adapter process")
         p.add_argument("--timeout", type=float, default=600)
         p.add_argument("--json-report")
+        p.add_argument("--profile", help="key into per-profile \"compare\" objects")
 
     p = sub.add_parser("record"); common(p)
     p.add_argument("--out", required=True)

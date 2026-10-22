@@ -92,6 +92,16 @@ class HarnessTest(unittest.TestCase):
         self.record()
         self.assertEqual(self.compare({}, "--ignore-key", "timing").returncode, 0)
 
+    def test_profiles(self):
+        write(self.cases, json.dumps({"id": "neg", "args": [-7, 2], "compare": {"tx": "exact", "cr": "invariant"}}) + "\n")
+        self.record()
+        tx = self.compare({"TRUNC": "1"}, "--profile", "tx")
+        self.assertEqual(tx.returncode, 1)
+        cr = self.compare({"TRUNC": "1"}, "--profile", "cr")
+        self.assertEqual(cr.returncode, 0, cr.stdout)
+        self.assertIn("0/0 passed, 1 not compared", cr.stdout)
+        self.assertNotEqual(self.compare({}).returncode, 0)  # missing --profile is an error
+
     def test_check(self):
         p = self.run_h("check", "--cases", self.cases, "--cmd", f"{sys.executable} {self.adapter}",
                        "--checker", f"{sys.executable} {self.checker}")
